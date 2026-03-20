@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { useTranslation } from 'react-i18next';
 
 import { DEFAULT_SOURCE_CONFIG } from "../constants";
 import { shared } from "../styles/shared";
@@ -16,6 +17,8 @@ export function SourceSettingsScreen({
   onBack,
   onUpdateSourceConfig,
 }: Props) {
+  const { t } = useTranslation();
+
   function resetToDefault() {
     onUpdateSourceConfig({
       owner: DEFAULT_SOURCE_CONFIG.owner,
@@ -28,12 +31,12 @@ export function SourceSettingsScreen({
   return (
     <View style={shared.sectionStack}>
       <View style={shared.card}>
-        <Text style={shared.sectionTitle}>詳細設定</Text>
+        <Text style={shared.sectionTitle}>{t('settings.title')}</Text>
         <Text style={shared.sectionText}>
-          GitHub から取得する単語帳の公開先を設定します。
+          {t('settings.description')}
         </Text>
 
-        <Text style={styles.label}>公開している人の名前</Text>
+        <Text style={styles.label}>{t('settings.ownerLabel')}</Text>
         <TextInput
           autoCapitalize="none"
           value={sourceConfig.owner}
@@ -41,7 +44,7 @@ export function SourceSettingsScreen({
           style={styles.input}
         />
 
-        <Text style={styles.label}>保管先の名前</Text>
+        <Text style={styles.label}>{t('settings.repoLabel')}</Text>
         <TextInput
           autoCapitalize="none"
           value={sourceConfig.repo}
@@ -49,7 +52,7 @@ export function SourceSettingsScreen({
           style={styles.input}
         />
 
-        <Text style={styles.label}>どこから読むか</Text>
+        <Text style={styles.label}>{t('settings.refTypeLabel')}</Text>
         <View style={styles.segmentRow}>
           {(["branch", "tag"] as RefType[]).map((refType) => (
             <Pressable
@@ -66,14 +69,14 @@ export function SourceSettingsScreen({
                   sourceConfig.refType === refType && styles.segmentTextActive,
                 ]}
               >
-                {refType === "branch" ? "ブランチ" : "タグ"}
+                {refType === "branch" ? t('settings.branch') : t('settings.tag')}
               </Text>
             </Pressable>
           ))}
         </View>
 
         <Text style={styles.label}>
-          {sourceConfig.refType === "branch" ? "ブランチ名" : "タグ名"}
+          {sourceConfig.refType === "branch" ? t('settings.branchName') : t('settings.tagName')}
         </Text>
         <TextInput
           autoCapitalize="none"
@@ -83,7 +86,7 @@ export function SourceSettingsScreen({
         />
 
         <View style={styles.infoPanel}>
-          <Text style={styles.infoLabel}>カタログURL</Text>
+          <Text style={styles.infoLabel}>{t('settings.catalogUrl')}</Text>
           <Text style={styles.infoValue}>
             {buildCatalogUrl(sourceConfig)}
           </Text>
@@ -91,10 +94,10 @@ export function SourceSettingsScreen({
 
         <View style={shared.actionsRow}>
           <Pressable onPress={resetToDefault} style={shared.secondaryButton}>
-            <Text style={shared.secondaryButtonText}>デフォルトに戻す</Text>
+            <Text style={shared.secondaryButtonText}>{t('settings.resetToDefault')}</Text>
           </Pressable>
           <Pressable onPress={onBack} style={shared.primaryButton}>
-            <Text style={shared.primaryButtonText}>戻る</Text>
+            <Text style={shared.primaryButtonText}>{t('action.back')}</Text>
           </Pressable>
         </View>
       </View>

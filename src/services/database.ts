@@ -1,6 +1,7 @@
 import { Directory, File } from "expo-file-system";
 import * as SQLite from "expo-sqlite";
 
+import i18n from "../i18n";
 import type { Card, CardRow } from "../types";
 
 export type DeckMetadata = {
@@ -36,9 +37,7 @@ export async function readCardsFromDatabase(
     );
 
     if (!cardsTable) {
-      throw new Error(
-        "この単語帳は開けませんでした。カードの一覧が入ったファイルを選んでください。",
-      );
+      throw new Error(i18n.t('error.invalidDeckFile'));
     }
 
     const columns = await database.getAllAsync<{ name: string }>(
@@ -57,9 +56,7 @@ export async function readCardsFromDatabase(
         : null;
 
     if (!summaryColumn) {
-      throw new Error(
-        "この単語帳は開けませんでした。summary(またはmeaning)列が必要です。",
-      );
+      throw new Error(i18n.t('error.missingColumns'));
     }
 
     const detailSelect = detailColumn
@@ -73,7 +70,7 @@ export async function readCardsFromDatabase(
     );
 
     if (!rows.length) {
-      throw new Error("この単語帳にはカードが入っていません。");
+      throw new Error(i18n.t('error.emptyDeck'));
     }
 
     return rows.map((row) => ({

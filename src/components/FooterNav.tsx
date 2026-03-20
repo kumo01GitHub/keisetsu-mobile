@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { SCREEN_TABS } from "../constants";
@@ -9,6 +10,8 @@ type Props = {
 };
 
 export function FooterNav({ screen, onChangeScreen }: Props) {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.footerNavWrap}>
       <View style={styles.footerNav}>
@@ -36,7 +39,7 @@ export function FooterNav({ screen, onChangeScreen }: Props) {
                   active && styles.footerTabLabelActive,
                 ]}
               >
-                {tab.label}
+                {t(`nav.${tab.key}.label` as 'nav.study.label')}
               </Text>
               <Text
                 style={[
@@ -44,7 +47,7 @@ export function FooterNav({ screen, onChangeScreen }: Props) {
                   active && styles.footerTabCaptionActive,
                 ]}
               >
-                {tab.caption}
+                {t(`nav.${tab.key}.caption` as 'nav.study.caption')}
               </Text>
             </Pressable>
           );

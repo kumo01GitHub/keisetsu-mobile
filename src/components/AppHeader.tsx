@@ -1,12 +1,15 @@
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from "react-native";
 
 export function AppHeader() {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.header}>
       <View style={styles.titleGroup}>
         <Text style={styles.eyebrow}>keisetsu</Text>
-        <Text style={styles.title}>単語帳で学ぶ</Text>
-        <Text style={styles.subtitle}>今日のカードを、短く深く。</Text>
+        <Text style={styles.title}>{t('header.title')}</Text>
+        <Text style={styles.subtitle}>{t('header.subtitle')}</Text>
       </View>
     </View>
   );

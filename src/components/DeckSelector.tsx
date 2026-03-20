@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { useTranslation } from 'react-i18next';
 
 import { shared } from "../styles/shared";
 import type { DeckOption } from "../types";
@@ -32,21 +33,22 @@ export function DeckSelector({
   } | null>(null);
   const triggerWrapRef = useRef<View>(null);
   const showSampleOption = deckOptions.length === 0;
+  const { t } = useTranslation();
 
   const selectedLabel = useMemo(() => {
     if (!activeDatabaseName) {
       return showSampleOption
-        ? "アプリのサンプル単語帳"
-        : (deckOptions[0]?.displayName ?? "単語帳を選択");
+        ? t('deck.sampleDeck')
+        : (deckOptions[0]?.displayName ?? t('deck.selectDeck'));
     }
 
     return (
       deckOptions.find(
         (deckOption) => deckOption.databaseName === activeDatabaseName,
       )?.displayName ??
-      (showSampleOption ? "アプリのサンプル単語帳" : "単語帳を選択")
+      (showSampleOption ? t('deck.sampleDeck') : t('deck.selectDeck'))
     );
-  }, [activeDatabaseName, deckOptions, showSampleOption]);
+  }, [activeDatabaseName, deckOptions, showSampleOption, t]);
 
   function handleSelect(databaseName: string | null) {
     onSelectDeck(databaseName);
@@ -98,7 +100,7 @@ export function DeckSelector({
               !activeDatabaseName && styles.dropdownItemTextActive,
             ]}
           >
-            アプリのサンプル単語帳
+            {t('deck.sampleDeck')}
           </Text>
         </Pressable>
       ) : null}
@@ -126,14 +128,14 @@ export function DeckSelector({
       })}
 
       <Pressable onPress={handleAddDeck} style={styles.dropdownAddItem}>
-        <Text style={styles.dropdownAddItemText}>+ 追加する</Text>
+        <Text style={styles.dropdownAddItemText}>{t('deck.addDeck')}</Text>
       </Pressable>
     </>
   );
 
   return (
     <View style={shared.card}>
-      <Text style={shared.sectionTitle}>使う単語帳</Text>
+      <Text style={shared.sectionTitle}>{t('deck.activeDeck')}</Text>
 
       <View style={styles.dropdownWrap}>
         <View ref={triggerWrapRef} collapsable={false}>
@@ -141,7 +143,7 @@ export function DeckSelector({
             onPress={toggleDropdown}
             style={styles.dropdownButton}
             accessibilityRole="button"
-            accessibilityLabel="単語帳を選択"
+            accessibilityLabel={t('deck.selectDeck')}
           >
             <Text style={styles.dropdownSelectedText} numberOfLines={1}>
               {selectedLabel}
@@ -186,7 +188,7 @@ export function DeckSelector({
 
       {!deckOptions.length ? (
         <Text style={shared.emptyText}>
-          追加した単語帳がまだないため、現在はアプリのサンプル単語帳のみ選べます。
+          {t('deck.noDecksHint')}
         </Text>
       ) : null}
     </View>

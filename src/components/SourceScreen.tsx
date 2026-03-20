@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { useTranslation } from 'react-i18next';
 
 import { shared } from "../styles/shared";
 import type { CatalogDeck, DeckOption, SourceConfig } from "../types";
@@ -38,6 +39,7 @@ export function SourceScreen({
   onImportLocalDatabase,
 }: Props) {
   const [catalogPage, setCatalogPage] = useState(1);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setCatalogPage(1);
@@ -58,17 +60,17 @@ export function SourceScreen({
     catalogDecks.length,
   );
   const fetchButtonLabel = catalogBusy
-    ? "取得中…"
+    ? t('source.fetching')
     : catalogDecks.length > 0
-      ? "リフレッシュ"
-      : "カタログを取得";
+      ? t('source.refresh')
+      : t('source.fetchCatalog');
 
   return (
     <View style={shared.sectionStack}>
       <View style={shared.card}>
-        <Text style={shared.sectionTitle}>単語帳を追加</Text>
+        <Text style={shared.sectionTitle}>{t('source.addDeckTitle')}</Text>
         <Text style={shared.sectionText}>
-          カタログを取得して、追加したい単語帳を選んでください。取得先を変えるときは詳細設定を開いてください。
+          {t('source.addDeckDescription')}
         </Text>
 
         <View style={shared.actionsRow}>
@@ -76,7 +78,7 @@ export function SourceScreen({
             onPress={onOpenAdvancedSettings}
             style={shared.secondaryButton}
           >
-            <Text style={shared.secondaryButtonText}>詳細設定</Text>
+            <Text style={shared.secondaryButtonText}>{t('source.advancedSettings')}</Text>
           </Pressable>
           <Pressable
             onPress={onFetchCatalog}
@@ -89,8 +91,11 @@ export function SourceScreen({
 
         {catalogDecks.length > 0 ? (
           <Text style={styles.catalogPageStatus}>
-            {catalogDecks.length}件中 {catalogPageStart}-{catalogPageEnd}
-            件を表示
+            {t('source.paginationStatus', {
+              count: catalogDecks.length,
+              start: catalogPageStart,
+              end: catalogPageEnd,
+            })}
           </Text>
         ) : null}
 
@@ -102,7 +107,7 @@ export function SourceScreen({
                 <Text style={styles.catalogDesc}>{deck.description}</Text>
               ) : null}
               {deck.cardCount != null ? (
-                <Text style={styles.catalogCount}>{deck.cardCount}件</Text>
+                <Text style={styles.catalogCount}>{t('source.cardCount', { count: deck.cardCount })}</Text>
               ) : null}
             </View>
             <Pressable
@@ -113,7 +118,7 @@ export function SourceScreen({
                 !catalogAvailable && styles.disabledButton,
               ]}
             >
-              <Text style={styles.addButtonText}>追加</Text>
+              <Text style={styles.addButtonText}>{t('action.add')}</Text>
             </Pressable>
           </View>
         ))}
@@ -128,7 +133,7 @@ export function SourceScreen({
                 currentCatalogPage <= 1 && styles.disabledButton,
               ]}
             >
-              <Text style={styles.pagerButtonText}>前へ</Text>
+              <Text style={styles.pagerButtonText}>{t('action.prev')}</Text>
             </Pressable>
 
             <Text style={styles.pagerLabel}>
@@ -146,33 +151,32 @@ export function SourceScreen({
                   styles.disabledButton,
               ]}
             >
-              <Text style={styles.pagerButtonText}>次へ</Text>
+              <Text style={styles.pagerButtonText}>{t('action.next')}</Text>
             </Pressable>
           </View>
         ) : null}
 
         {!catalogAvailable && !catalogBusy ? (
           <Text style={styles.offlineHint}>
-            catalog.json を取得できないため、GitHubからの追加は利用できません。
-            取得ボタンで再試行してください。
+            {t('source.offlineHint')}
           </Text>
         ) : null}
       </View>
 
       <View style={shared.card}>
-        <Text style={shared.sectionTitle}>端末から単語帳を追加</Text>
+        <Text style={shared.sectionTitle}>{t('source.localAddTitle')}</Text>
         <Text style={shared.sectionText}>
-          Filesなどから単語帳ファイルを選んで追加します。端末の中を自動で探すことはしないので、使いたいファイルを自分で選んでください。
+          {t('source.localAddDescription')}
         </Text>
 
-        <Text style={styles.label}>追加時の単語帳名</Text>
+        <Text style={styles.label}>{t('source.deckNameLabel')}</Text>
         <TextInput
           value={sourceConfig.localImportDeckName}
           onChangeText={(value) =>
             onUpdateSourceConfig({ localImportDeckName: value })
           }
           style={styles.input}
-          placeholder="例: TOEIC 基本"
+          placeholder={t('source.deckNamePlaceholder')}
           placeholderTextColor="#9ca3af"
         />
 
@@ -182,14 +186,14 @@ export function SourceScreen({
           }
           style={shared.primaryButton}
         >
-          <Text style={shared.primaryButtonText}>単語帳ファイルを選ぶ</Text>
+          <Text style={shared.primaryButtonText}>{t('source.selectFile')}</Text>
         </Pressable>
       </View>
 
       <View style={shared.card}>
-        <Text style={shared.sectionTitle}>使える単語帳</Text>
+        <Text style={shared.sectionTitle}>{t('source.savedDecksTitle')}</Text>
         <Text style={shared.sectionText}>
-          追加した単語帳の一覧です。学習とテストで使う単語帳は、各画面の上にある選択欄から切り替えられます。
+          {t('source.savedDecksDescription')}
         </Text>
         {deckOptions.length ? (
           deckOptions.map((deckOption) => (
@@ -207,8 +211,8 @@ export function SourceScreen({
                 </Text>
                 <Text style={styles.databaseHint}>
                   {activeDatabaseName === deckOption.databaseName
-                    ? "いま使っている単語帳です"
-                    : "あとで選べるように保存されています"}
+                    ? t('source.activeDeckHint')
+                    : t('source.savedDeckHint')}
                 </Text>
               </View>
 
@@ -217,13 +221,13 @@ export function SourceScreen({
                   onPress={() => onDeleteDatabase(deckOption.databaseName)}
                   style={styles.deleteButton}
                 >
-                  <Text style={styles.deleteButtonText}>削除</Text>
+                  <Text style={styles.deleteButtonText}>{t('action.delete')}</Text>
                 </Pressable>
               </View>
             </View>
           ))
         ) : (
-          <Text style={shared.emptyText}>まだ追加した単語帳はありません。</Text>
+          <Text style={shared.emptyText}>{t('source.noSavedDecks')}</Text>
         )}
       </View>
     </View>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useTranslation } from 'react-i18next';
 
 import { DeckSelector } from "./DeckSelector";
 import { shared } from "../styles/shared";
@@ -41,6 +42,7 @@ export function TestScreen({
   );
   const currentTestCard = testQueue[testIndex];
   const answerCount = testQueue.length;
+  const { t } = useTranslation();
 
   useEffect(() => {
     setChoiceLocked(false);
@@ -93,28 +95,28 @@ export function TestScreen({
       />
 
       <View style={shared.card}>
-        <Text style={shared.sectionTitle}>4択テスト</Text>
+        <Text style={shared.sectionTitle}>{t('test.title')}</Text>
         <Text style={shared.sectionText}>
-          単語に対応する概要を4択から選びます。10問をランダムに出題します。
+          {t('test.description')}
         </Text>
 
         {testComplete ? (
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryTitle}>今回の結果</Text>
+            <Text style={styles.summaryTitle}>{t('test.resultTitle')}</Text>
             <Text style={styles.summaryScore}>
-              {testScore.correct} / {answerCount}
+              {t('test.score', { correct: testScore.correct, total: answerCount })}
             </Text>
             <Text style={styles.summaryDetail}>
-              まちがい: {testScore.incorrect}
+              {t('test.mistakes', { count: testScore.incorrect })}
             </Text>
             <Pressable onPress={onStartNewTest} style={shared.primaryButton}>
-              <Text style={shared.primaryButtonText}>もう一度テストする</Text>
+              <Text style={shared.primaryButtonText}>{t('test.retake')}</Text>
             </Pressable>
           </View>
         ) : currentTestCard ? (
           <View style={styles.testCard}>
             <Text style={styles.progressText}>
-              {testIndex + 1} / {testQueue.length}
+              {t('test.progress', { current: testIndex + 1, total: testQueue.length })}
             </Text>
             <Text style={styles.testTerm}>{currentTestCard.term}</Text>
             <View style={styles.choicesWrap}>
@@ -133,18 +135,18 @@ export function TestScreen({
               ))}
               {multipleChoiceOptions.length < 4 ? (
                 <Text style={styles.choiceHint}>
-                  4択には最低4件のカードが必要です。
+                  {t('test.minCardsHint')}
                 </Text>
               ) : null}
             </View>
           </View>
         ) : (
-          <Text style={shared.emptyText}>テスト対象のカードがありません。</Text>
+          <Text style={shared.emptyText}>{t('test.noCards')}</Text>
         )}
       </View>
 
       <View style={shared.card}>
-        <Text style={shared.sectionTitle}>最近の結果</Text>
+        <Text style={shared.sectionTitle}>{t('test.recentResults')}</Text>
         {testHistory.length ? (
           testHistory.map((record) => (
             <View key={`${record.finishedAt}-${record.databaseLabel}`}>
@@ -165,7 +167,7 @@ export function TestScreen({
                     {record.correct}/{record.total}
                   </Text>
                   <Text style={styles.historyTapHint}>
-                    タップで間違いを見る
+                    {t('test.tapForMistakes')}
                   </Text>
                 </View>
               </Pressable>
@@ -173,7 +175,7 @@ export function TestScreen({
               {expandedHistoryKey ===
               `${record.finishedAt}-${record.databaseLabel}` ? (
                 <View style={styles.historyDetailCard}>
-                  <Text style={styles.historyDetailTitle}>間違えた単語</Text>
+                  <Text style={styles.historyDetailTitle}>{t('test.mistakesTitle')}</Text>
                   {record.mistakes?.length ? (
                     record.mistakes.map((mistake, index) => (
                       <View
@@ -188,11 +190,11 @@ export function TestScreen({
                     ))
                   ) : record.incorrect === 0 ? (
                     <Text style={styles.historyNoMistake}>
-                      この回は全問正解です。
+                      {t('test.allCorrect')}
                     </Text>
                   ) : (
                     <Text style={styles.historyNoMistake}>
-                      この回の間違い詳細データはありません。
+                      {t('test.noMistakeData')}
                     </Text>
                   )}
                 </View>
@@ -200,7 +202,7 @@ export function TestScreen({
             </View>
           ))
         ) : (
-          <Text style={shared.emptyText}>まだテスト履歴はありません。</Text>
+          <Text style={shared.emptyText}>{t('test.noHistory')}</Text>
         )}
       </View>
     </View>

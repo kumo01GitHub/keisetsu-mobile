@@ -4,7 +4,9 @@ import * as SQLite from 'expo-sqlite';
 import Storage from 'expo-sqlite/kv-store';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import './src/i18n';
 import {
   ActivityIndicator,
   Alert,
@@ -55,13 +57,14 @@ function buildTestQueue(cards: Card[]): Card[] {
 }
 
 export default function App() {
+  const { t } = useTranslation();
   const [screen, setScreen] = useState<Screen | 'source-settings'>('study');
   const [sourceConfig, setSourceConfig] = useState<SourceConfig>(DEFAULT_SOURCE_CONFIG);
   const [cards, setCards] = useState<Card[]>(SAMPLE_CARDS);
   const [selectedStudyCardId, setSelectedStudyCardId] = useState<string | null>(SAMPLE_CARDS[0]?.id ?? null);
   const [databaseNames, setDatabaseNames] = useState<string[]>([]);
   const [deckDisplayNames, setDeckDisplayNames] = useState<Record<string, string>>({});
-  const [busyMessage, setBusyMessage] = useState<string | null>('単語帳を準備しています...');
+  const [busyMessage, setBusyMessage] = useState<string | null>(t('loading.preparing'));
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [testQueue, setTestQueue] = useState<Card[]>(buildTestQueue(SAMPLE_CARDS));
   const [testIndex, setTestIndex] = useState(0);
@@ -130,7 +133,7 @@ export default function App() {
       }
     } catch (error) {
       applyCards(SAMPLE_CARDS);
-      setErrorMessage(error instanceof Error ? error.message : '初期化に失敗しました。');
+      setErrorMessage(error instanceof Error ? error.message : t('error.initFailed'));
     } finally {
       setBusyMessage(null);
     }
@@ -175,7 +178,7 @@ export default function App() {
 
   function resolveActiveDatabaseLabel() {
     if (!sourceConfig.activeDbName) {
-      return 'アプリのサンプル単語帳';
+      return t('deck.sampleDeck');
     }
 
     return resolveDeckDisplayName(sourceConfig.activeDbName, deckDisplayNames);
@@ -186,7 +189,7 @@ export default function App() {
     activeSource: SourceKind,
     nextScreen: Screen = 'study'
   ) {
-    setBusyMessage('単語帳を開いています...');
+    setBusyMessage(t('loading.openingDeck'));
     setErrorMessage(null);
 
     try {
@@ -196,9 +199,9 @@ export default function App() {
       await refreshDatabaseNames();
       setScreen(nextScreen);
     } catch (error) {
-      const message = error instanceof Error ? error.message : '単語帳を開けませんでした。';
+      const message = error instanceof Error ? error.message : t('error.openDeckFailed');
       setErrorMessage(message);
-      Alert.alert('単語帳を開けません', message);
+      Alert.alert(t('error.cannotOpenDeck'), message);
     } finally {
       setBusyMessage(null);
     }
@@ -213,7 +216,7 @@ export default function App() {
       const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error(`カタログを取得できませんでした。HTTP ${response.status}`);
+        throw new Error(t('error.catalogHttpFailed', { status: response.status }));
       }
 
       const data = await response.json() as {
@@ -232,7 +235,7 @@ export default function App() {
 
             if (!manifestResponse.ok) {
               throw new Error(
-                `単語帳情報を取得できませんでした。${deck.id} (HTTP ${manifestResponse.status})`
+                t('error.deckInfoHttpFailed', { id: deck.id, status: manifestResponse.status })
               );
             }
 
@@ -248,9 +251,9 @@ export default function App() {
     } catch (error) {
       setCatalogAvailable(false);
       setCatalogDecks([]);
-      const message = error instanceof Error ? error.message : 'カタログを取得できませんでした。';
+      const message = error instanceof Error ? error.message : t('error.catalogFetchFailed');
       setErrorMessage(message);
-      Alert.alert('カタログを取得できません', message);
+      Alert.alert(t('error.cannotFetchCatalog'), message);
     } finally {
       setCatalogBusy(false);
     }
@@ -264,14 +267,14 @@ export default function App() {
       `${sourceConfig.owner}-${sourceConfig.repo}-${ref}-${getTailName(deck.path)}`
     );
 
-    setBusyMessage('GitHubから単語帳を追加しています...');
+    setBusyMessage(t('loading.addingDeckFromGitHub'));
     setErrorMessage(null);
 
     try {
       const response = await fetch(rawUrl);
 
       if (!response.ok) {
-        throw new Error(`GitHubから取得できませんでした。HTTP ${response.status}`);
+        throw new Error(t('error.githubHttpFailed', { status: response.status }));
       }
 
       const bytes = new Uint8Array(await response.arrayBuffer());
@@ -292,9 +295,9 @@ export default function App() {
 
       await activateDatabase(targetName, 'downloaded', 'study');
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'GitHubから単語帳を追加できませんでした。';
+      const message = error instanceof Error ? error.message : t('error.addDeckFromGitHubFailed');
       setErrorMessage(message);
-      Alert.alert('単語帳を追加できません', message);
+      Alert.alert(t('error.cannotAddDeck'), message);
       setBusyMessage(null);
     }
   }
@@ -303,7 +306,7 @@ export default function App() {
     const normalizedDisplayName = displayName.trim();
 
     if (!normalizedDisplayName) {
-      Alert.alert('追加時の単語帳名を入力してください');
+      Alert.alert(t('error.deckNameRequired'));
       return;
     }
 
@@ -338,9 +341,9 @@ export default function App() {
       updateSourceConfig({ localImportDeckName: '' });
       await activateDatabase(targetName, 'imported', 'study');
     } catch (error) {
-      const message = error instanceof Error ? error.message : '端末の単語帳を追加できませんでした。';
+      const message = error instanceof Error ? error.message : t('error.addLocalDeckFailed');
       setErrorMessage(message);
-      Alert.alert('単語帳を追加できません', message);
+      Alert.alert(t('error.cannotAddDeck'), message);
     }
   }
 
@@ -369,7 +372,7 @@ export default function App() {
   async function deleteDatabase(databaseName: string) {
     const isActiveDatabase = sourceConfig.activeDbName === databaseName;
 
-    setBusyMessage('単語帳を削除しています...');
+    setBusyMessage(t('loading.deletingDeck'));
     setErrorMessage(null);
 
     try {
@@ -397,9 +400,9 @@ export default function App() {
 
       await refreshDatabaseNames();
     } catch (error) {
-      const message = error instanceof Error ? error.message : '単語帳を削除できませんでした。';
+      const message = error instanceof Error ? error.message : t('error.deleteDeckFailed');
       setErrorMessage(message);
-      Alert.alert('削除に失敗しました', message);
+      Alert.alert(t('error.deleteFailed'), message);
     } finally {
       setBusyMessage(null);
     }
@@ -409,13 +412,13 @@ export default function App() {
     const displayName = resolveDeckDisplayName(databaseName, deckDisplayNames);
     const description =
       sourceConfig.activeDbName === databaseName
-        ? 'この単語帳はいま使っています。削除するとアプリのサンプル単語帳に切り替わります。'
-        : 'この単語帳を保存一覧から削除します。';
+        ? t('confirm.deleteActiveMessage')
+        : t('confirm.deleteInactiveMessage');
 
-    Alert.alert('単語帳を削除しますか', `${displayName}\n\n${description}`, [
-      { text: 'キャンセル', style: 'cancel' },
+    Alert.alert(t('confirm.deleteTitle'), `${displayName}\n\n${description}`, [
+      { text: t('action.cancel'), style: 'cancel' },
       {
-        text: '削除',
+        text: t('action.delete'),
         style: 'destructive',
         onPress: () => {
           void deleteDatabase(databaseName);
@@ -503,7 +506,7 @@ export default function App() {
 
             {errorMessage ? (
               <View style={styles.errorCard}>
-                <Text style={styles.errorTitle}>最新のエラー</Text>
+                <Text style={styles.errorTitle}>{t('error.latestError')}</Text>
                 <Text style={styles.errorText}>{errorMessage}</Text>
               </View>
             ) : null}

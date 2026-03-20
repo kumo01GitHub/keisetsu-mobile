@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useTranslation } from 'react-i18next';
 
 import { DeckSelector } from "./DeckSelector";
 import { shared } from "../styles/shared";
@@ -29,6 +30,7 @@ export function StudyScreen({
   const [shuffled, setShuffled] = useState(false);
   const [orderedCards, setOrderedCards] = useState<Card[]>(cards);
   const [listExpanded, setListExpanded] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setShuffled(false);
@@ -93,7 +95,7 @@ export function StudyScreen({
 
       <View style={shared.card}>
         <View style={styles.cardHeader}>
-          <Text style={shared.sectionTitle}>学習モード</Text>
+          <Text style={shared.sectionTitle}>{t('study.title')}</Text>
           {cards.length > 0 && (
             <View style={styles.headerRight}>
               <Pressable
@@ -109,11 +111,11 @@ export function StudyScreen({
                     shuffled && styles.shuffleButtonTextActive,
                   ]}
                 >
-                  シャッフル
+                  {t('study.shuffle')}
                 </Text>
               </Pressable>
               <Text style={styles.progressBadge}>
-                {resolvedIndex + 1} / {orderedCards.length}
+                {t('study.progress', { current: resolvedIndex + 1, total: orderedCards.length })}
               </Text>
             </View>
           )}
@@ -144,7 +146,7 @@ export function StudyScreen({
                   ) : null}
                 </>
               ) : (
-                <Text style={styles.flipHint}>タップして答えを確認 →</Text>
+                <Text style={styles.flipHint}>{t('study.flipHint')}</Text>
               )}
             </Pressable>
 
@@ -158,21 +160,21 @@ export function StudyScreen({
                 onPress={handlePrev}
                 disabled={isFirst}
               >
-                <Text style={shared.secondaryButtonText}>← 前へ</Text>
+                <Text style={shared.secondaryButtonText}>{t('study.prev')}</Text>
               </Pressable>
               <Pressable
                 style={[shared.secondaryButton, styles.navButton]}
                 onPress={handleNext}
               >
                 <Text style={shared.secondaryButtonText}>
-                  {isLast ? "最初から" : "次へ →"}
+                  {isLast ? t('study.restart') : t('study.next')}
                 </Text>
               </Pressable>
             </View>
           </>
         ) : (
           <Text style={shared.sectionText}>
-            単語帳を選ぶとカードが表示されます。
+            {t('study.emptyHint')}
           </Text>
         )}
       </View>
@@ -183,7 +185,7 @@ export function StudyScreen({
             onPress={() => setListExpanded((e) => !e)}
             style={styles.listHeader}
           >
-            <Text style={shared.sectionTitle}>カード一覧</Text>
+            <Text style={shared.sectionTitle}>{t('study.cardList')}</Text>
             <Text style={styles.accordionChevron}>
               {listExpanded ? "▲" : "▼"}
             </Text>
@@ -212,7 +214,7 @@ export function StudyScreen({
                     </Text>
                   </View>
                   <Text style={styles.studyRowCategory}>
-                    {card.category || "未分類"}
+                    {card.category || t('study.uncategorized')}
                   </Text>
                 </Pressable>
               );

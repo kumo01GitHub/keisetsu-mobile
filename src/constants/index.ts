@@ -47,12 +47,8 @@ export const DEFAULT_SOURCE_CONFIG: SourceConfig = {
   activeSource: "sample",
 };
 
-export const SCREEN_TABS: {
-  key: Screen;
-  label: string;
-  caption: string;
-}[] = [
-  { key: "study", label: "学習", caption: "カードを見る" },
-  { key: "test", label: "テスト", caption: "結果を記録" },
-  { key: "source", label: "単語帳", caption: "使うカードを選ぶ" },
+export const SCREEN_TABS: { key: Screen }[] = [
+  { key: "study" },
+  { key: "test" },
+  { key: "source" },
 ];
