@@ -3,8 +3,7 @@ name: Mobile CI
 on:
   pull_request:
   push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   test:
@@ -25,5 +24,11 @@ jobs:
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
 
-      - name: Run lint and tests
-        run: npm run lint:test
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm run test:spec
+
+      - name: E2E tests
+        run: npm run test:e2e

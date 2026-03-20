@@ -11,7 +11,6 @@
     "test:spec": "jest --runInBand",
     "test:e2e": "playwright test",
     "test": "npm run test:spec && npm run test:e2e",
-    "lint:test": "npm run lint && npm run test",
     "typecheck": "tsc --noEmit",
     "build:check": "npm run build:check:ios && npm run build:check:android",
     "build:check:ios": "CI=1 expo export --platform ios --output-dir dist/ios",

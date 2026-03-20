@@ -9,7 +9,7 @@ export default defineConfig({
     trace: 'retain-on-failure',
   },
   webServer: {
-    command: 'npm run web -- --non-interactive --port 19006',
+    command: 'CI=1 npm run web -- --port 19006',
     url: 'http://127.0.0.1:19006',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
