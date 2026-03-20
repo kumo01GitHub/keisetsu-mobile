@@ -1,22 +1,35 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useTranslation } from 'react-i18next';
 
 import { DeckSelector } from "./DeckSelector";
 import { shared } from "../styles/shared";
 import type { Card, DeckOption } from "../types";
 import { shuffleCards } from "../utils";
 
+/**
+ * Props for the study screen, including the active deck, study order, and navigation callbacks.
+ */
 type Props = {
+  /** Currently selected local database file, or null when no deck is active. */
   activeDatabaseName: string | null;
+  /** Available decks that can be selected from the shared deck picker. */
   deckOptions: DeckOption[];
+  /** Cards loaded from the active deck. */
   cards: Card[];
+  /** Card currently focused in study mode. */
   selectedStudyCardId: string | null;
+  /** Switches the active deck. */
   onSelectDeck: (databaseName: string | null) => void;
+  /** Opens the source screen so the user can add or manage decks. */
   onOpenSource: () => void;
+  /** Selects a specific card in the current study order. */
   onSelectCard: (id: string) => void;
 };
 
+/**
+ * Study mode screen that shows a flash card, supports shuffling, and allows quick card navigation.
+ */
 export function StudyScreen({
   activeDatabaseName,
   deckOptions,
@@ -55,6 +68,9 @@ export function StudyScreen({
     }
   }
 
+  /**
+   * Advances through the current study order and reshuffles when repeat mode is enabled.
+   */
   function handleNext() {
     if (isLast) {
       if (shuffled) {
@@ -75,6 +91,9 @@ export function StudyScreen({
     }
   }
 
+  /**
+   * Toggles shuffled study order while preserving the original order from props when disabled.
+   */
   function handleShuffle() {
     const next = shuffled ? [...cards] : shuffleCards(cards);
     setOrderedCards(next);
@@ -95,7 +114,7 @@ export function StudyScreen({
 
       <View style={shared.card}>
         <View style={styles.cardHeader}>
-          <Text style={shared.sectionTitle}>{t('study.title')}</Text>
+          <Text style={shared.sectionTitle}>{t("study.title")}</Text>
           {cards.length > 0 && (
             <View style={styles.headerRight}>
               <Pressable
@@ -111,11 +130,14 @@ export function StudyScreen({
                     shuffled && styles.shuffleButtonTextActive,
                   ]}
                 >
-                  {t('study.shuffle')}
+                  {t("study.shuffle")}
                 </Text>
               </Pressable>
               <Text style={styles.progressBadge}>
-                {t('study.progress', { current: resolvedIndex + 1, total: orderedCards.length })}
+                {t("study.progress", {
+                  current: resolvedIndex + 1,
+                  total: orderedCards.length,
+                })}
               </Text>
             </View>
           )}
@@ -146,7 +168,7 @@ export function StudyScreen({
                   ) : null}
                 </>
               ) : (
-                <Text style={styles.flipHint}>{t('study.flipHint')}</Text>
+                <Text style={styles.flipHint}>{t("study.flipHint")}</Text>
               )}
             </Pressable>
 
@@ -160,22 +182,22 @@ export function StudyScreen({
                 onPress={handlePrev}
                 disabled={isFirst}
               >
-                <Text style={shared.secondaryButtonText}>{t('study.prev')}</Text>
+                <Text style={shared.secondaryButtonText}>
+                  {t("study.prev")}
+                </Text>
               </Pressable>
               <Pressable
                 style={[shared.secondaryButton, styles.navButton]}
                 onPress={handleNext}
               >
                 <Text style={shared.secondaryButtonText}>
-                  {isLast ? t('study.restart') : t('study.next')}
+                  {isLast ? t("study.restart") : t("study.next")}
                 </Text>
               </Pressable>
             </View>
           </>
         ) : (
-          <Text style={shared.sectionText}>
-            {t('study.emptyHint')}
-          </Text>
+          <Text style={shared.sectionText}>{t("study.emptyHint")}</Text>
         )}
       </View>
 
@@ -185,7 +207,7 @@ export function StudyScreen({
             onPress={() => setListExpanded((e) => !e)}
             style={styles.listHeader}
           >
-            <Text style={shared.sectionTitle}>{t('study.cardList')}</Text>
+            <Text style={shared.sectionTitle}>{t("study.cardList")}</Text>
             <Text style={styles.accordionChevron}>
               {listExpanded ? "▲" : "▼"}
             </Text>
@@ -214,7 +236,7 @@ export function StudyScreen({
                     </Text>
                   </View>
                   <Text style={styles.studyRowCategory}>
-                    {card.category || t('study.uncategorized')}
+                    {card.category || t("study.uncategorized")}
                   </Text>
                 </Pressable>
               );

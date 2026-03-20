@@ -7,21 +7,39 @@ import { shared } from "../styles/shared";
 import type { Card, DeckOption, TestRecord, TestScore } from "../types";
 import { shuffleArray } from "../utils";
 
+/**
+ * Props for the test screen, including quiz state, answer handling, and score history.
+ */
 type Props = {
+  /** Currently selected local database file, or null when no deck is active. */
   activeDatabaseName: string | null;
+  /** Available decks that can be selected from the shared deck picker. */
   deckOptions: DeckOption[];
+  /** Full card list for the active deck, used to build answer choices. */
   cards: Card[];
+  /** Current quiz queue derived from the active deck. */
   testQueue: Card[];
+  /** Zero-based index of the current quiz item. */
   testIndex: number;
+  /** Running correct and incorrect totals for the active quiz. */
   testScore: TestScore;
+  /** Whether the current quiz session has finished. */
   testComplete: boolean;
+  /** Previously completed test sessions shown in the history panel. */
   testHistory: TestRecord[];
+  /** Switches the active deck. */
   onSelectDeck: (databaseName: string | null) => void;
+  /** Opens the source screen so the user can add or manage decks. */
   onOpenSource: () => void;
+  /** Records whether the user answered the current question correctly. */
   onAnswer: (correct: boolean) => void;
+  /** Starts a fresh quiz from the active deck. */
   onStartNewTest: () => void;
 };
 
+/**
+ * Test mode screen that generates multiple-choice prompts and shows recent score history.
+ */
 export function TestScreen({
   activeDatabaseName,
   deckOptions,
@@ -70,6 +88,9 @@ export function TestScreen({
     return shuffleArray([currentTestCard.summary, ...wrongSummaryCandidates]);
   }, [cards, currentTestCard]);
 
+  /**
+   * Records the selected answer once and prevents double submission from repeated taps.
+   */
   function handleMultipleChoiceAnswer(selectedSummary: string) {
     if (!currentTestCard || choiceLocked) {
       return;
@@ -79,6 +100,9 @@ export function TestScreen({
     onAnswer(selectedSummary === currentTestCard.summary);
   }
 
+  /**
+   * Expands or collapses a past test result to reveal mistake details.
+   */
   function toggleHistoryRecord(recordKey: string) {
     setExpandedHistoryKey((current) =>
       current === recordKey ? null : recordKey,

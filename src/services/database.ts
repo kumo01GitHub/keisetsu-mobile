@@ -4,8 +4,13 @@ import * as SQLite from "expo-sqlite";
 import i18n from "../i18n";
 import type { Card, CardRow } from "../types";
 
+/**
+ * Minimal deck identity stored alongside card content in each local database.
+ */
 export type DeckMetadata = {
+  /** Human-readable deck name shown in the UI. */
   displayName: string;
+  /** File name persisted in deck metadata and catalog manifests. */
   fileName: string;
 };
 
@@ -18,10 +23,16 @@ const DECK_METADATA_TABLE_SQL = `
   )
 `;
 
+/**
+ * Returns the directory where Expo SQLite stores local deck databases.
+ */
 export function getDatabaseDirectory(): Directory {
   return new Directory(SQLite.defaultDatabaseDirectory);
 }
 
+/**
+ * Loads cards from a local database file and maps legacy schemas to the app's current card model.
+ */
 export async function readCardsFromDatabase(
   databaseName: string,
 ): Promise<Card[]> {
@@ -85,6 +96,9 @@ export async function readCardsFromDatabase(
   }
 }
 
+/**
+ * Lists user-visible deck database files while excluding SQLite sidecar artifacts.
+ */
 export async function listDatabaseNames(): Promise<string[]> {
   const directory = getDatabaseDirectory();
   directory.create({ idempotent: true, intermediates: true });
@@ -97,6 +111,9 @@ export async function listDatabaseNames(): Promise<string[]> {
     .sort((left, right) => left.localeCompare(right));
 }
 
+/**
+ * Reads deck metadata when available without requiring every imported file to be fully normalized.
+ */
 export async function readDeckMetadata(
   databaseName: string,
 ): Promise<DeckMetadata | null> {
@@ -138,6 +155,9 @@ export async function readDeckMetadata(
   }
 }
 
+/**
+ * Creates or updates the single metadata row used to label a local deck database.
+ */
 export async function upsertDeckMetadata(
   databaseName: string,
   metadata: DeckMetadata,
@@ -166,6 +186,9 @@ export async function upsertDeckMetadata(
   }
 }
 
+/**
+ * Deletes a local database file if it exists.
+ */
 export function deleteDatabaseFile(databaseName: string): void {
   const targetFile = new File(SQLite.defaultDatabaseDirectory, databaseName);
 

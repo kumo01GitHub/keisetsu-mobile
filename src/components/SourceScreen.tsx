@@ -1,28 +1,47 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { useTranslation } from 'react-i18next';
 
 import { shared } from "../styles/shared";
 import type { CatalogDeck, DeckOption, SourceConfig } from "../types";
 
 const CATALOG_PAGE_SIZE = 10;
 
+/**
+ * Props for the source screen, covering catalog access, local imports, and saved deck management.
+ */
 type Props = {
+  /** Currently selected local database file, or null when nothing is active. */
   activeDatabaseName: string | null;
+  /** Editable source configuration state for local import and remote catalog settings. */
   sourceConfig: SourceConfig;
+  /** Decks already stored on the device. */
   deckOptions: DeckOption[];
+  /** Remote catalog entries available for download. */
   catalogDecks: CatalogDeck[];
+  /** Whether a catalog fetch is currently in progress. */
   catalogBusy: boolean;
+  /** Whether remote catalog operations are available in the current environment. */
   catalogAvailable: boolean;
+  /** Switches the active deck. */
   onSelectDeck: (databaseName: string) => void;
+  /** Removes a saved local database file. */
   onDeleteDatabase: (databaseName: string) => void;
+  /** Opens advanced source configuration. */
   onOpenAdvancedSettings: () => void;
+  /** Updates source configuration state. */
   onUpdateSourceConfig: (patch: Partial<SourceConfig>) => void;
+  /** Fetches or refreshes the remote deck catalog. */
   onFetchCatalog: () => void;
+  /** Downloads a deck from the remote catalog. */
   onDownloadFromCatalog: (deck: CatalogDeck) => void;
+  /** Imports a local database file under the provided display name. */
   onImportLocalDatabase: (displayName: string) => void;
 };
 
+/**
+ * Source management screen for downloading catalog decks, importing local files, and managing saved decks.
+ */
 export function SourceScreen({
   activeDatabaseName,
   sourceConfig,
@@ -60,17 +79,17 @@ export function SourceScreen({
     catalogDecks.length,
   );
   const fetchButtonLabel = catalogBusy
-    ? t('source.fetching')
+    ? t("source.fetching")
     : catalogDecks.length > 0
-      ? t('source.refresh')
-      : t('source.fetchCatalog');
+      ? t("source.refresh")
+      : t("source.fetchCatalog");
 
   return (
     <View style={shared.sectionStack}>
       <View style={shared.card}>
-        <Text style={shared.sectionTitle}>{t('source.addDeckTitle')}</Text>
+        <Text style={shared.sectionTitle}>{t("source.addDeckTitle")}</Text>
         <Text style={shared.sectionText}>
-          {t('source.addDeckDescription')}
+          {t("source.addDeckDescription")}
         </Text>
 
         <View style={shared.actionsRow}>
@@ -78,7 +97,7 @@ export function SourceScreen({
             onPress={onOpenAdvancedSettings}
             style={shared.secondaryButton}
           >
-            <Text style={shared.secondaryButtonText}>{t('source.advancedSettings')}</Text>
+            <Text style={shared.secondaryButtonText}>{t("source.advancedSettings")}</Text>
           </Pressable>
           <Pressable
             onPress={onFetchCatalog}
@@ -91,7 +110,7 @@ export function SourceScreen({
 
         {catalogDecks.length > 0 ? (
           <Text style={styles.catalogPageStatus}>
-            {t('source.paginationStatus', {
+            {t("source.paginationStatus", {
               count: catalogDecks.length,
               start: catalogPageStart,
               end: catalogPageEnd,
@@ -107,7 +126,7 @@ export function SourceScreen({
                 <Text style={styles.catalogDesc}>{deck.description}</Text>
               ) : null}
               {deck.cardCount != null ? (
-                <Text style={styles.catalogCount}>{t('source.cardCount', { count: deck.cardCount })}</Text>
+                <Text style={styles.catalogCount}>{t("source.cardCount", { count: deck.cardCount })}</Text>
               ) : null}
             </View>
             <Pressable
@@ -118,7 +137,7 @@ export function SourceScreen({
                 !catalogAvailable && styles.disabledButton,
               ]}
             >
-              <Text style={styles.addButtonText}>{t('action.add')}</Text>
+              <Text style={styles.addButtonText}>{t("action.add")}</Text>
             </Pressable>
           </View>
         ))}
@@ -133,7 +152,7 @@ export function SourceScreen({
                 currentCatalogPage <= 1 && styles.disabledButton,
               ]}
             >
-              <Text style={styles.pagerButtonText}>{t('action.prev')}</Text>
+              <Text style={styles.pagerButtonText}>{t("action.prev")}</Text>
             </Pressable>
 
             <Text style={styles.pagerLabel}>
@@ -151,32 +170,32 @@ export function SourceScreen({
                   styles.disabledButton,
               ]}
             >
-              <Text style={styles.pagerButtonText}>{t('action.next')}</Text>
+              <Text style={styles.pagerButtonText}>{t("action.next")}</Text>
             </Pressable>
           </View>
         ) : null}
 
         {!catalogAvailable && !catalogBusy ? (
           <Text style={styles.offlineHint}>
-            {t('source.offlineHint')}
+            {t("source.offlineHint")}
           </Text>
         ) : null}
       </View>
 
       <View style={shared.card}>
-        <Text style={shared.sectionTitle}>{t('source.localAddTitle')}</Text>
+        <Text style={shared.sectionTitle}>{t("source.localAddTitle")}</Text>
         <Text style={shared.sectionText}>
-          {t('source.localAddDescription')}
+          {t("source.localAddDescription")}
         </Text>
 
-        <Text style={styles.label}>{t('source.deckNameLabel')}</Text>
+        <Text style={styles.label}>{t("source.deckNameLabel")}</Text>
         <TextInput
           value={sourceConfig.localImportDeckName}
           onChangeText={(value) =>
             onUpdateSourceConfig({ localImportDeckName: value })
           }
           style={styles.input}
-          placeholder={t('source.deckNamePlaceholder')}
+          placeholder={t("source.deckNamePlaceholder")}
           placeholderTextColor="#9ca3af"
         />
 
@@ -186,7 +205,7 @@ export function SourceScreen({
           }
           style={shared.primaryButton}
         >
-          <Text style={shared.primaryButtonText}>{t('source.selectFile')}</Text>
+            <Text style={shared.primaryButtonText}>{t("source.selectFile")}</Text>
         </Pressable>
       </View>
 
