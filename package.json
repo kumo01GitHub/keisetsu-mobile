@@ -12,9 +12,9 @@
     "test:e2e": "playwright test",
     "test": "npm run test:spec && npm run test:e2e",
     "typecheck": "tsc --noEmit",
-    "build:check": "npm run build:check:ios && npm run build:check:android",
-    "build:check:ios": "CI=1 expo export --platform ios --output-dir dist/ios",
-    "build:check:android": "CI=1 expo export --platform android --output-dir dist/android"
+    "build:ci": "npm run build:ci:ios && npm run build:ci:android",
+    "build:ci:ios": "CI=1 expo export --platform ios --output-dir dist/ios",
+    "build:ci:android": "CI=1 expo export --platform android --output-dir dist/android"
   },
   "dependencies": {
     "@react-native-picker/picker": "2.11.1",

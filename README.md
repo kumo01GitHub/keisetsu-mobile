@@ -79,7 +79,7 @@ npm run android
 ```bash
 npm run lint
 npm run typecheck
-npm run build:check
+npm run build:ci
 ```
 
 ## catalog / kdb の取得先
