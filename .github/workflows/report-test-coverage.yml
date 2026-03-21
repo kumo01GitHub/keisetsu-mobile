@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  test-coverage:
+  report-test-coverage:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
