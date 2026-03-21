@@ -130,8 +130,6 @@ manifest の path を使って .kdb を取得
   ```
   公開URLは `app.json` の `updates.url` で確認できます。
 
----
-
 ## 関連リンク
 
 - [keisetsu-database](https://github.com/kumo01GitHub/keisetsu-database)
