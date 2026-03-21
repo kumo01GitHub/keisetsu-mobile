@@ -31,7 +31,6 @@
         "android.permission.INTERNET"
       ]
     },
-
     "plugins": [
       [
         "expo-file-system",
@@ -52,6 +51,7 @@
     },
     "updates": {
       "url": "https://u.expo.dev/e7aad213-54f2-490d-8cc3-7e06ea89c3d9"
-    }
+    },
+    "platforms": ["ios", "android"]
   }
 }
