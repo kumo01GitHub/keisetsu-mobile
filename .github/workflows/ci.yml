@@ -1,10 +1,9 @@
-name: Mobile CI
+name: CI
 
 on:
   pull_request:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -30,7 +29,7 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Unit tests
+      - name: Run unit tests
         run: npm run test:spec
 
       - name: Build

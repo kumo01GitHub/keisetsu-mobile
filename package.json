@@ -8,6 +8,7 @@
     "ios": "expo start --ios",
     "lint": "eslint . --ext .ts,.tsx",
     "test:spec": "jest --runInBand",
+    "test:coverage": "jest --coverage",
     "test": "npm run test:spec",
     "typecheck": "tsc --noEmit",
     "build:ci": "npm run build:ci:ios && npm run build:ci:android",
