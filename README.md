@@ -139,5 +139,5 @@ manifest の path を使って .kdb を取得
 ## 関連リンク
 
 - [keisetsu-database](https://github.com/kumo01GitHub/keisetsu-database)
-- [keisetsu-admin](https://github.com/kumo01GitHub/keisetsu-admin)
+- [keisetsu-publisher](https://github.com/kumo01GitHub/keisetsu-publisher)
 - [keisetsu-docs](https://github.com/kumo01GitHub/keisetsu-docs)
