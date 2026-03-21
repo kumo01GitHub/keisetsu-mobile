@@ -1,6 +1,6 @@
 # keisetsu Mobile
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/kumo01GitHub/keisetsu/pulls)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/kumo01GitHub/keisetsu-mobile/pulls)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![CI](https://github.com/kumo01GitHub/keisetsu-mobile/actions/workflows/ci.yml/badge.svg)](https://github.com/kumo01GitHub/keisetsu-mobile/actions/workflows/ci.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/99ebf607cb804fd4a7e7fb2f037605a0)](https://app.codacy.com/gh/kumo01GitHub/keisetsu-mobile/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
