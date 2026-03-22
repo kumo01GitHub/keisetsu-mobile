@@ -5,26 +5,27 @@ export const shared = StyleSheet.create({
     gap: 16,
   },
   card: {
-    backgroundColor: '#fff', // surface
-    borderRadius: 14,
+    backgroundColor: '#fff',
+    borderRadius: 10,
     padding: 18,
     gap: 12,
     shadowColor: '#000',
-    shadowOpacity: 0.03,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.02,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 1 },
     elevation: 1,
     borderWidth: 1,
-    borderColor: '#ececec', // line
+    borderColor: '#ececec',
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a1b1d', // foreground
+    color: '#1a1b1d',
     letterSpacing: 0.1,
   },
   sectionText: {
-    color: '#444',
+    color: '#1a1b1d',
+    opacity: 0.7,
     lineHeight: 21,
   },
   actionsRow: {
@@ -44,7 +45,7 @@ export const shared = StyleSheet.create({
     letterSpacing: 0.2,
   },
   secondaryButton: {
-    backgroundColor: '#f5f0e5', // surface-strong
+    backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 10,
@@ -55,6 +56,7 @@ export const shared = StyleSheet.create({
     color: '#1a1b1d',
     fontWeight: '700',
     letterSpacing: 0.2,
+    opacity: 0.8,
   },
   emptyText: {
     color: '#888',
