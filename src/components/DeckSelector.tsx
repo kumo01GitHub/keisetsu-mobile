@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Modal,
   Pressable,
@@ -7,9 +8,8 @@ import {
   Text,
   View,
 } from "react-native";
-import { useTranslation } from 'react-i18next';
 
-import { shared } from "../styles/shared";
+import { COLORS, shared } from "../styles/shared";
 import type { DeckOption } from "../types";
 
 type Props = {
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   dropdownChevron: {
-    color: "#0f766e",
+    color: COLORS.accent,
     fontSize: 12,
     fontWeight: "800",
   },
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ecfeff",
   },
   dropdownAddItemText: {
-    color: "#0f766e",
+    color: COLORS.accent,
     fontWeight: "800",
   },
   modalRoot: {

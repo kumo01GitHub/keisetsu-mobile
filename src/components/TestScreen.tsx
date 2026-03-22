@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useTranslation } from 'react-i18next';
 
 import { DeckSelector } from "./DeckSelector";
-import { shared } from "../styles/shared";
+import { shared, COLORS } from "../styles/shared";
 import type { Card, DeckOption, TestRecord, TestScore } from "../types";
-import { shuffleArray } from "../utils";
+import { shuffleArray, formatDateTime } from "../utils";
 
 /**
  * Props for the test screen, including quiz state, answer handling, and score history.
@@ -119,28 +119,32 @@ export function TestScreen({
       />
 
       <View style={shared.card}>
-        <Text style={shared.sectionTitle}>{t('test.title')}</Text>
-        <Text style={shared.sectionText}>
-          {t('test.description')}
-        </Text>
+        <Text style={shared.sectionTitle}>{t("test.title")}</Text>
+        <Text style={shared.sectionText}>{t("test.description")}</Text>
 
         {testComplete ? (
           <View style={styles.summaryCard}>
-            <Text style={styles.summaryTitle}>{t('test.resultTitle')}</Text>
+            <Text style={styles.summaryTitle}>{t("test.resultTitle")}</Text>
             <Text style={styles.summaryScore}>
-              {t('test.score', { correct: testScore.correct, total: answerCount })}
+              {t("test.score", {
+                correct: testScore.correct,
+                total: answerCount,
+              })}
             </Text>
             <Text style={styles.summaryDetail}>
-              {t('test.mistakes', { count: testScore.incorrect })}
+              {t("test.mistakes", { count: testScore.incorrect })}
             </Text>
             <Pressable onPress={onStartNewTest} style={shared.primaryButton}>
-              <Text style={shared.primaryButtonText}>{t('test.retake')}</Text>
+              <Text style={shared.primaryButtonText}>{t("test.retake")}</Text>
             </Pressable>
           </View>
         ) : currentTestCard ? (
           <View style={styles.testCard}>
             <Text style={styles.progressText}>
-              {t('test.progress', { current: testIndex + 1, total: testQueue.length })}
+              {t("test.progress", {
+                current: testIndex + 1,
+                total: testQueue.length,
+              })}
             </Text>
             <Text style={styles.testTerm}>{currentTestCard.term}</Text>
             <View style={styles.choicesWrap}>
@@ -158,19 +162,17 @@ export function TestScreen({
                 </Pressable>
               ))}
               {multipleChoiceOptions.length < 4 ? (
-                <Text style={styles.choiceHint}>
-                  {t('test.minCardsHint')}
-                </Text>
+                <Text style={styles.choiceHint}>{t("test.minCardsHint")}</Text>
               ) : null}
             </View>
           </View>
         ) : (
-          <Text style={shared.emptyText}>{t('test.noCards')}</Text>
+          <Text style={shared.emptyText}>{t("test.noCards")}</Text>
         )}
       </View>
 
       <View style={shared.card}>
-        <Text style={shared.sectionTitle}>{t('test.recentResults')}</Text>
+        <Text style={shared.sectionTitle}>{t("test.recentResults")}</Text>
         {testHistory.length ? (
           testHistory.map((record) => (
             <View key={`${record.finishedAt}-${record.databaseLabel}`}>
@@ -184,14 +186,16 @@ export function TestScreen({
               >
                 <View>
                   <Text style={styles.historyDeck}>{record.databaseLabel}</Text>
-                  <Text style={styles.historyDate}>{record.finishedAt}</Text>
+                  <Text style={styles.historyDate}>
+                    {formatDateTime(record.finishedAt)}
+                  </Text>
                 </View>
                 <View style={styles.historyRight}>
                   <Text style={styles.historyScore}>
                     {record.correct}/{record.total}
                   </Text>
                   <Text style={styles.historyTapHint}>
-                    {t('test.tapForMistakes')}
+                    {t("test.tapForDetails")}
                   </Text>
                 </View>
               </Pressable>
@@ -199,26 +203,37 @@ export function TestScreen({
               {expandedHistoryKey ===
               `${record.finishedAt}-${record.databaseLabel}` ? (
                 <View style={styles.historyDetailCard}>
-                  <Text style={styles.historyDetailTitle}>{t('test.mistakesTitle')}</Text>
-                  {record.mistakes?.length ? (
-                    record.mistakes.map((mistake, index) => (
+                  <Text style={styles.historyDetailTitle}>
+                    {t("test.resultDetailsTitle", "テスト結果")}
+                  </Text>
+                  {record.results && record.results.length > 0 ? (
+                    record.results.map((result, index) => (
                       <View
-                        key={`${record.finishedAt}-${mistake.term}-${index}`}
+                        key={`${record.finishedAt}-${result.term}-${index}`}
                         style={styles.mistakeRow}
                       >
-                        <Text style={styles.mistakeTerm}>{mistake.term}</Text>
+                        <Text style={styles.mistakeTerm}>{result.term}</Text>
                         <Text style={styles.mistakeSummary}>
-                          {mistake.summary}
+                          {result.summary}
+                        </Text>
+                        <Text
+                          style={{
+                            color: result.correct
+                              ? COLORS.correct
+                              : COLORS.incorrect,
+                            fontWeight: "bold",
+                            marginLeft: 8,
+                          }}
+                        >
+                          {result.correct
+                            ? t("test.correct", "正解")
+                            : t("test.incorrect", "不正解")}
                         </Text>
                       </View>
                     ))
-                  ) : record.incorrect === 0 ? (
-                    <Text style={styles.historyNoMistake}>
-                      {t('test.allCorrect')}
-                    </Text>
                   ) : (
                     <Text style={styles.historyNoMistake}>
-                      {t('test.noMistakeData')}
+                      {t("test.noResultData", "記録データなし")}
                     </Text>
                   )}
                 </View>
@@ -226,7 +241,7 @@ export function TestScreen({
             </View>
           ))
         ) : (
-          <Text style={shared.emptyText}>{t('test.noHistory')}</Text>
+          <Text style={shared.emptyText}>{t("test.noHistory")}</Text>
         )}
       </View>
     </View>
@@ -235,69 +250,88 @@ export function TestScreen({
 
 const styles = StyleSheet.create({
   testCard: {
-    backgroundColor: "#fff7ed",
-    borderRadius: 22,
+    backgroundColor: "#fff",
+    borderRadius: 16,
     padding: 18,
     gap: 16,
   },
   progressText: {
-    color: "#9a3412",
+    color: "#0f766e",
     fontWeight: "800",
   },
   testTerm: {
     fontSize: 30,
     lineHeight: 34,
     fontWeight: "800",
-    color: "#7c2d12",
+    color: "#1a1b1d",
   },
   choicesWrap: {
     gap: 10,
   },
   choiceButton: {
-    backgroundColor: "#ffffff",
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    borderWidth: 1,
-    borderColor: "#fed7aa",
+    backgroundColor: "#f8f8f8",
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderWidth: 1.5,
+    borderColor: "#ececec",
+    marginVertical: 4,
+    shadowColor: "#000",
+    shadowOpacity: 0.02,
+    shadowRadius: 1,
+    shadowOffset: { width: 0, height: 1 },
+    elevation: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    minHeight: 44,
   },
   choiceButtonDisabled: {
-    opacity: 0.6,
+    opacity: 0.5,
+  },
+  choiceButtonActive: {
+    backgroundColor: "#e6f7f5",
+    borderColor: "#0f766e",
+    shadowColor: "#0f766e",
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
   },
   choiceText: {
-    color: "#1f2937",
+    color: "#1a1b1d",
     lineHeight: 20,
     fontWeight: "700",
+    fontSize: 15,
+    letterSpacing: 0.1,
+    flex: 1,
   },
   choiceHint: {
-    color: "#9a3412",
+    color: "#888",
     fontSize: 12,
   },
   summaryCard: {
-    backgroundColor: "#ecfccb",
-    borderRadius: 22,
+    backgroundColor: "#ececec",
+    borderRadius: 16,
     padding: 18,
     gap: 10,
   },
   summaryTitle: {
-    color: "#365314",
+    color: "#1a1b1d",
     fontWeight: "800",
   },
   summaryScore: {
-    color: "#14532d",
+    color: "#0f766e",
     fontSize: 34,
     fontWeight: "900",
   },
   summaryDetail: {
-    color: "#3f6212",
+    color: "#888",
     marginBottom: 4,
   },
   historyRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#f8f5ec",
-    borderRadius: 16,
+    backgroundColor: "#ececec",
+    borderRadius: 14,
     padding: 14,
   },
   historyRight: {
@@ -305,11 +339,11 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   historyDeck: {
-    color: "#111827",
+    color: "#1a1b1d",
     fontWeight: "800",
   },
   historyDate: {
-    color: "#6b7280",
+    color: "#888",
     marginTop: 4,
   },
   historyScore: {
@@ -318,37 +352,37 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   historyTapHint: {
-    color: "#6b7280",
+    color: "#888",
     fontSize: 11,
     fontWeight: "600",
   },
   historyDetailCard: {
     marginTop: 8,
     marginBottom: 10,
-    backgroundColor: "#f0fdf4",
-    borderRadius: 14,
+    backgroundColor: "#ececec",
+    borderRadius: 10,
     padding: 12,
     gap: 8,
   },
   historyDetailTitle: {
-    color: "#166534",
+    color: "#0f766e",
     fontWeight: "800",
   },
   mistakeRow: {
     gap: 2,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 10,
   },
   mistakeTerm: {
-    color: "#14532d",
+    color: "#0f766e",
     fontWeight: "800",
   },
   mistakeSummary: {
-    color: "#1f2937",
+    color: "#1a1b1d",
     lineHeight: 20,
   },
   historyNoMistake: {
-    color: "#166534",
+    color: "#0f766e",
   },
 });

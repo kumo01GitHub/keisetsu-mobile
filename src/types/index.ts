@@ -31,11 +31,18 @@ export type TestMistake = {
   summary: string;
 };
 
+export type TestResult = {
+  term: string;
+  summary: string;
+  correct: boolean;
+};
+
 export type TestRecord = TestScore & {
   finishedAt: string;
   total: number;
   databaseLabel: string;
   mistakes?: TestMistake[];
+  results: TestResult[];
 };
 
 export type CardRow = {

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
-import { shared } from "../styles/shared";
+import { COLORS, shared } from "../styles/shared";
 import type { CatalogDeck, DeckOption, SourceConfig } from "../types";
 
 const CATALOG_PAGE_SIZE = 10;
@@ -49,7 +49,6 @@ export function SourceScreen({
   catalogDecks,
   catalogBusy,
   catalogAvailable,
-  onSelectDeck,
   onDeleteDatabase,
   onOpenAdvancedSettings,
   onUpdateSourceConfig,
@@ -88,16 +87,15 @@ export function SourceScreen({
     <View style={shared.sectionStack}>
       <View style={shared.card}>
         <Text style={shared.sectionTitle}>{t("source.addDeckTitle")}</Text>
-        <Text style={shared.sectionText}>
-          {t("source.addDeckDescription")}
-        </Text>
-
+        <Text style={shared.sectionText}>{t("source.addDeckDescription")}</Text>
         <View style={shared.actionsRow}>
           <Pressable
             onPress={onOpenAdvancedSettings}
             style={shared.secondaryButton}
           >
-            <Text style={shared.secondaryButtonText}>{t("source.advancedSettings")}</Text>
+            <Text style={shared.secondaryButtonText}>
+              {t("source.advancedSettings")}
+            </Text>
           </Pressable>
           <Pressable
             onPress={onFetchCatalog}
@@ -126,7 +124,9 @@ export function SourceScreen({
                 <Text style={styles.catalogDesc}>{deck.description}</Text>
               ) : null}
               {deck.cardCount != null ? (
-                <Text style={styles.catalogCount}>{t("source.cardCount", { count: deck.cardCount })}</Text>
+                <Text style={styles.catalogCount}>
+                  {t("source.cardCount", { count: deck.cardCount })}
+                </Text>
               ) : null}
             </View>
             <Pressable
@@ -176,9 +176,7 @@ export function SourceScreen({
         ) : null}
 
         {!catalogAvailable && !catalogBusy ? (
-          <Text style={styles.offlineHint}>
-            {t("source.offlineHint")}
-          </Text>
+          <Text style={styles.offlineHint}>{t("source.offlineHint")}</Text>
         ) : null}
       </View>
 
@@ -205,14 +203,14 @@ export function SourceScreen({
           }
           style={shared.primaryButton}
         >
-            <Text style={shared.primaryButtonText}>{t("source.selectFile")}</Text>
+          <Text style={shared.primaryButtonText}>{t("source.selectFile")}</Text>
         </Pressable>
       </View>
 
       <View style={shared.card}>
-        <Text style={shared.sectionTitle}>{t('source.savedDecksTitle')}</Text>
+        <Text style={shared.sectionTitle}>{t("source.savedDecksTitle")}</Text>
         <Text style={shared.sectionText}>
-          {t('source.savedDecksDescription')}
+          {t("source.savedDecksDescription")}
         </Text>
         {deckOptions.length ? (
           deckOptions.map((deckOption) => (
@@ -230,8 +228,8 @@ export function SourceScreen({
                 </Text>
                 <Text style={styles.databaseHint}>
                   {activeDatabaseName === deckOption.databaseName
-                    ? t('source.activeDeckHint')
-                    : t('source.savedDeckHint')}
+                    ? t("source.activeDeckHint")
+                    : t("source.savedDeckHint")}
                 </Text>
               </View>
 
@@ -240,13 +238,15 @@ export function SourceScreen({
                   onPress={() => onDeleteDatabase(deckOption.databaseName)}
                   style={styles.deleteButton}
                 >
-                  <Text style={styles.deleteButtonText}>{t('action.delete')}</Text>
+                  <Text style={styles.deleteButtonText}>
+                    {t("action.delete")}
+                  </Text>
                 </Pressable>
               </View>
             </View>
           ))
         ) : (
-          <Text style={shared.emptyText}>{t('source.noSavedDecks')}</Text>
+          <Text style={shared.emptyText}>{t("source.noSavedDecks")}</Text>
         )}
       </View>
     </View>
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   catalogPageStatus: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#0f766e",
+    color: COLORS.accent,
   },
   pagerRow: {
     flexDirection: "row",
@@ -361,12 +361,12 @@ const styles = StyleSheet.create({
   },
   catalogCount: {
     fontSize: 12,
-    color: "#0f766e",
+    color: COLORS.accent,
     fontWeight: "700",
     marginTop: 2,
   },
   addButton: {
-    backgroundColor: "#0f766e",
+    backgroundColor: COLORS.accent,
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 10,

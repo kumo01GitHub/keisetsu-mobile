@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { DeckSelector } from "./DeckSelector";
-import { shared } from "../styles/shared";
+import { COLORS, shared } from "../styles/shared";
 import type { Card, DeckOption } from "../types";
 import { shuffleCards } from "../utils";
 
@@ -175,7 +175,6 @@ export function StudyScreen({
             <View style={styles.navRow}>
               <Pressable
                 style={[
-                  shared.secondaryButton,
                   styles.navButton,
                   isFirst && styles.navButtonDisabled,
                 ]}
@@ -187,7 +186,7 @@ export function StudyScreen({
                 </Text>
               </Pressable>
               <Pressable
-                style={[shared.secondaryButton, styles.navButton]}
+                style={styles.navButton}
                 onPress={handleNext}
               >
                 <Text style={shared.secondaryButtonText}>
@@ -277,7 +276,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
   },
   shuffleButtonActive: {
-    backgroundColor: "#fde68a",
+    backgroundColor: COLORS.accent,
   },
   shuffleButtonText: {
     color: "#374151",
@@ -285,11 +284,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   shuffleButtonTextActive: {
-    color: "#92400e",
+    color: COLORS.white,
   },
   progressBadge: {
-    backgroundColor: "#e0f2fe",
-    color: "#0369a1",
+    backgroundColor: COLORS.accent,
+    color: COLORS.white,
     fontWeight: "700",
     fontSize: 14,
     paddingHorizontal: 12,
@@ -332,7 +331,7 @@ const styles = StyleSheet.create({
   },
   categoryBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "#0f766e",
+    backgroundColor: COLORS.accent,
     color: "#f0fdfa",
     paddingHorizontal: 10,
     paddingVertical: 6,
@@ -347,6 +346,21 @@ const styles = StyleSheet.create({
   navButton: {
     flex: 1,
     alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#f8f8f8",
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderWidth: 1.5,
+    borderColor: "#ececec",
+    marginVertical: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.02,
+    shadowRadius: 1,
+    shadowOffset: { width: 0, height: 1 },
+    elevation: 1,
+    flexDirection: "row",
+    minHeight: 48,
   },
   navButtonDisabled: {
     opacity: 0.35,

@@ -1,8 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { useTranslation } from 'react-i18next';
 
 import { DEFAULT_SOURCE_CONFIG } from "../constants";
-import { shared } from "../styles/shared";
+import { COLORS, shared } from "../styles/shared";
 import type { RefType, SourceConfig } from "../types";
 import { buildCatalogUrl } from "../utils";
 
@@ -31,12 +31,10 @@ export function SourceSettingsScreen({
   return (
     <View style={shared.sectionStack}>
       <View style={shared.card}>
-        <Text style={shared.sectionTitle}>{t('settings.title')}</Text>
-        <Text style={shared.sectionText}>
-          {t('settings.description')}
-        </Text>
+        <Text style={shared.sectionTitle}>{t("settings.title")}</Text>
+        <Text style={shared.sectionText}>{t("settings.description")}</Text>
 
-        <Text style={styles.label}>{t('settings.ownerLabel')}</Text>
+        <Text style={styles.label}>{t("settings.ownerLabel")}</Text>
         <TextInput
           autoCapitalize="none"
           value={sourceConfig.owner}
@@ -44,7 +42,7 @@ export function SourceSettingsScreen({
           style={styles.input}
         />
 
-        <Text style={styles.label}>{t('settings.repoLabel')}</Text>
+        <Text style={styles.label}>{t("settings.repoLabel")}</Text>
         <TextInput
           autoCapitalize="none"
           value={sourceConfig.repo}
@@ -52,7 +50,7 @@ export function SourceSettingsScreen({
           style={styles.input}
         />
 
-        <Text style={styles.label}>{t('settings.refTypeLabel')}</Text>
+        <Text style={styles.label}>{t("settings.refTypeLabel")}</Text>
         <View style={styles.segmentRow}>
           {(["branch", "tag"] as RefType[]).map((refType) => (
             <Pressable
@@ -69,14 +67,18 @@ export function SourceSettingsScreen({
                   sourceConfig.refType === refType && styles.segmentTextActive,
                 ]}
               >
-                {refType === "branch" ? t('settings.branch') : t('settings.tag')}
+                {refType === "branch"
+                  ? t("settings.branch")
+                  : t("settings.tag")}
               </Text>
             </Pressable>
           ))}
         </View>
 
         <Text style={styles.label}>
-          {sourceConfig.refType === "branch" ? t('settings.branchName') : t('settings.tagName')}
+          {sourceConfig.refType === "branch"
+            ? t("settings.branchName")
+            : t("settings.tagName")}
         </Text>
         <TextInput
           autoCapitalize="none"
@@ -86,18 +88,18 @@ export function SourceSettingsScreen({
         />
 
         <View style={styles.infoPanel}>
-          <Text style={styles.infoLabel}>{t('settings.catalogUrl')}</Text>
-          <Text style={styles.infoValue}>
-            {buildCatalogUrl(sourceConfig)}
-          </Text>
+          <Text style={styles.infoLabel}>{t("settings.catalogUrl")}</Text>
+          <Text style={styles.infoValue}>{buildCatalogUrl(sourceConfig)}</Text>
         </View>
 
         <View style={shared.actionsRow}>
           <Pressable onPress={resetToDefault} style={shared.secondaryButton}>
-            <Text style={shared.secondaryButtonText}>{t('settings.resetToDefault')}</Text>
+            <Text style={shared.secondaryButtonText}>
+              {t("settings.resetToDefault")}
+            </Text>
           </Pressable>
           <Pressable onPress={onBack} style={shared.primaryButton}>
-            <Text style={shared.primaryButtonText}>{t('action.back')}</Text>
+            <Text style={shared.primaryButtonText}>{t("action.back")}</Text>
           </Pressable>
         </View>
       </View>
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#efe6d8",
   },
   segmentButtonActive: {
-    backgroundColor: "#0f766e",
+    backgroundColor: COLORS.accent,
   },
   segmentText: {
     color: "#374151",

@@ -1,3 +1,14 @@
+// ISO文字列→「YYYY/MM/DD HH:mm」形式（ローカル時刻）
+export function formatDateTime(isoString: string): string {
+  const date = new Date(isoString);
+  if (isNaN(date.getTime())) return isoString;
+  const y = date.getFullYear();
+  const m = (date.getMonth() + 1).toString().padStart(2, '0');
+  const d = date.getDate().toString().padStart(2, '0');
+  const hh = date.getHours().toString().padStart(2, '0');
+  const mm = date.getMinutes().toString().padStart(2, '0');
+  return `${y}/${m}/${d} ${hh}:${mm}`;
+}
 import type { Card, SourceConfig } from '../types';
 
 export function shuffleArray<T>(items: T[]): T[] {
