@@ -6,54 +6,29 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/99ebf607cb804fd4a7e7fb2f037605a0)](https://app.codacy.com/gh/kumo01GitHub/keisetsu-mobile/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/99ebf607cb804fd4a7e7fb2f037605a0)](https://app.codacy.com/gh/kumo01GitHub/keisetsu-mobile/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 
-keisetsu の学習クライアントです。  
-Expo + React Native で構成され、catalog / manifest / `.kdb` の取得とオフライン学習を担当します。
 
-## アプリでできること
+This is the learning client for keisetsu.
+Built with Expo + React Native, it handles fetching catalog/manifest/`.kdb` and enables offline study.
 
-- GitHub 上の catalog を読み込み、配布中の deck 一覧を取得
-- deck を選択して `.kdb` をダウンロードし、端末内 SQLite 領域に保存
-- 端末ローカルの `.kdb` をファイルピッカーから取り込み
-- 単語カードを閲覧する学習モード
-- ランダム出題で自己採点するテストモード
-- 直近テスト履歴（正誤、ミス語彙）を端末に保存
-- 保存済み deck の切り替えと削除
 
-## アプリの使い方
+## App Features
 
-### 1. Expo Go アプリのインストール
+- Load the catalog from GitHub and fetch the list of available decks
+- Select a deck to download its `.kdb` and save it to the device's SQLite storage
+- Import local `.kdb` files via file picker
+- Study mode for viewing word cards
+- Test mode for self-grading with random questions
+- Save recent test history (correct/incorrect, missed vocabulary) on the device
+- Switch and delete saved decks
 
-スマートフォンで下記の公式アプリをインストールしてください。
 
-- [Expo Go (iOS)](https://apps.apple.com/app/expo-go/id982107779)
-- [Expo Go (Android)](https://play.google.com/store/apps/details?id=host.exp.exponent)
-
-### 2. keisetsu アプリの起動
-
-Expo Go アプリを開き、下記のいずれかの方法で keisetsu アプリを起動してください。
-
-**公開URL**
-
-[https://u.expo.dev/e7aad213-54f2-490d-8cc3-7e06ea89c3d9](https://u.expo.dev/e7aad213-54f2-490d-8cc3-7e06ea89c3d9)
-
-**QRコード**
-
-![Expo QR](assets/keisetsu-expo-qr.png)
-
-これで keisetsu アプリをすぐに利用開始できます。
-
-## 対応言語
-
-- English (`en`)
-- 日本語 (`ja`)
-
-## アーキテクチャ
+## Architecture
 
 ```text
 App.tsx
-  |- 画面状態管理（study / test / source / source-settings）
-  |- catalog取得、manifest解決、deckダウンロード
-  |- テスト履歴保存
+  |- Screen state management (study / test / source / source-settings)
+  |- Catalog fetch, manifest resolution, deck download
+  |- Test history saving
   |
   +-- src/components/
   |     |- SourceScreen, SourceSettingsScreen
@@ -61,49 +36,50 @@ App.tsx
   |     |- AppHeader, FooterNav
   |
   +-- src/services/database.ts
-  |     |- SQLite入出力（cards, deck_metadata）
-  |     |- DB一覧取得、メタデータ更新、削除
+  |     |- SQLite I/O (cards, deck_metadata)
+  |     |- Get DB list, update metadata, delete
   |
   +-- src/constants, src/types, src/utils
-        |- 設定値、型定義、URL生成/表示名解決など
+        |- Config values, type definitions, URL generation/display name resolution, etc.
 ```
 
-### データモデル（要点）
+### Data Model (Key Points)
 
-- `deck_metadata.display_name` を単語帳の表示名に利用
-- `cards` は `term`, `summary` を必須として扱う
-- 互換入力として `summary` が無い場合 `meaning` 列を代替利用
-- 補足文は `detail` または `example` を利用
+- Use `deck_metadata.display_name` as the deck display name
+- `cards` require `term` and `summary` fields
+- If `summary` is missing, use the `meaning` column as a fallback
+- Use `detail` or `example` for supplementary text
 
-## ローカル開発手順
 
-### 前提
+## Local Development Steps
 
-- Node.js 20 系以上（推奨）
+### Prerequisites
+
+- Node.js 20.x or higher (recommended)
 - npm
-- iOS シミュレータ（Xcode）または Android Emulator
+- iOS Simulator (Xcode) or Android Emulator
 
-### セットアップ
+### Setup
 
 ```bash
 cd keisetsu-mobile
 npm ci
 ```
 
-### 開発サーバ起動
+### Start Development Server
 
 ```bash
 npm run start
 ```
 
-### 実機/シミュレータ起動
+### Launch on Device/Simulator
 
 ```bash
 npm run ios
 npm run android
 ```
 
-### 品質チェック
+### Quality Checks
 
 ```bash
 npm run lint
@@ -111,32 +87,21 @@ npm run typecheck
 npm run build:ci
 ```
 
-## catalog / kdb の取得先
+## Expo Deployment Steps
 
-アプリは次のURL形式を使用して deck 情報と kdb を取得します。
-
-```text
-https://raw.githubusercontent.com/{owner}/{repo}/{ref}/catalog/catalog.json
-https://raw.githubusercontent.com/{owner}/{repo}/{ref}/catalog/decks/{deck-id}.json
-manifest の path を使って .kdb を取得
-例: https://raw.githubusercontent.com/{owner}/{repo}/{ref}/databases/starter-basic.kdb
-```
-
-## Expo での公開手順
-
-1. Expo アカウントを作成し、`eas` CLI でログイン。
+1. Create an Expo account and log in with the `eas` CLI.
   ```bash
   npm ci
   eas login
   ```
-2. プロジェクトID（app.jsonの `projectId`）を確認
-3. 公開ビルド・アップデート
+2. Check the project ID (`projectId` in app.json)
+3. Publish build/update:
   ```bash
   eas update --branch main
   ```
-  公開URLは `app.json` の `updates.url` で確認できます。
+  The public URL can be found in `updates.url` in `app.json`.
 
-## 関連リンク
+## Related Links
 
 - [keisetsu-database](https://github.com/kumo01GitHub/keisetsu-database)
 - [keisetsu-publisher](https://github.com/kumo01GitHub/keisetsu-publisher)
