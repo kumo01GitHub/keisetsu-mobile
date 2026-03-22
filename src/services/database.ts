@@ -48,7 +48,7 @@ export async function readCardsFromDatabase(
     );
 
     if (!cardsTable) {
-      throw new Error(i18n.t('error.invalidDeckFile'));
+      throw new Error(i18n.t("error.invalidDeckFile"));
     }
 
     const columns = await database.getAllAsync<{ name: string }>(
@@ -67,7 +67,7 @@ export async function readCardsFromDatabase(
         : null;
 
     if (!summaryColumn) {
-      throw new Error(i18n.t('error.missingColumns'));
+      throw new Error(i18n.t("error.missingColumns"));
     }
 
     const detailSelect = detailColumn
@@ -81,7 +81,7 @@ export async function readCardsFromDatabase(
     );
 
     if (!rows.length) {
-      throw new Error(i18n.t('error.emptyDeck'));
+      throw new Error(i18n.t("error.emptyDeck"));
     }
 
     return rows.map((row) => ({

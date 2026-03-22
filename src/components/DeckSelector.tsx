@@ -38,15 +38,15 @@ export function DeckSelector({
   const selectedLabel = useMemo(() => {
     if (!activeDatabaseName) {
       return showSampleOption
-        ? t('deck.sampleDeck')
-        : (deckOptions[0]?.displayName ?? t('deck.selectDeck'));
+        ? t("deck.sampleDeck")
+        : (deckOptions[0]?.displayName ?? t("deck.selectDeck"));
     }
 
     return (
       deckOptions.find(
         (deckOption) => deckOption.databaseName === activeDatabaseName,
       )?.displayName ??
-      (showSampleOption ? t('deck.sampleDeck') : t('deck.selectDeck'))
+      (showSampleOption ? t("deck.sampleDeck") : t("deck.selectDeck"))
     );
   }, [activeDatabaseName, deckOptions, showSampleOption, t]);
 
@@ -100,7 +100,7 @@ export function DeckSelector({
               !activeDatabaseName && styles.dropdownItemTextActive,
             ]}
           >
-            {t('deck.sampleDeck')}
+            {t("deck.sampleDeck")}
           </Text>
         </Pressable>
       ) : null}
@@ -128,14 +128,14 @@ export function DeckSelector({
       })}
 
       <Pressable onPress={handleAddDeck} style={styles.dropdownAddItem}>
-        <Text style={styles.dropdownAddItemText}>{t('deck.addDeck')}</Text>
+        <Text style={styles.dropdownAddItemText}>{t("deck.addDeck")}</Text>
       </Pressable>
     </>
   );
 
   return (
     <View style={shared.card}>
-      <Text style={shared.sectionTitle}>{t('deck.activeDeck')}</Text>
+      <Text style={shared.sectionTitle}>{t("deck.activeDeck")}</Text>
 
       <View style={styles.dropdownWrap}>
         <View ref={triggerWrapRef} collapsable={false}>
@@ -143,7 +143,7 @@ export function DeckSelector({
             onPress={toggleDropdown}
             style={styles.dropdownButton}
             accessibilityRole="button"
-            accessibilityLabel={t('deck.selectDeck')}
+            accessibilityLabel={t("deck.selectDeck")}
           >
             <Text style={styles.dropdownSelectedText} numberOfLines={1}>
               {selectedLabel}
@@ -187,9 +187,7 @@ export function DeckSelector({
       </View>
 
       {!deckOptions.length ? (
-        <Text style={shared.emptyText}>
-          {t('deck.noDecksHint')}
-        </Text>
+        <Text style={shared.emptyText}>{t("deck.noDecksHint")}</Text>
       ) : null}
     </View>
   );

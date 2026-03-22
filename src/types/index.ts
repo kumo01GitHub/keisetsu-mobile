@@ -1,6 +1,6 @@
-export type Screen = 'source' | 'study' | 'test';
-export type RefType = 'branch' | 'tag';
-export type SourceKind = 'sample' | 'downloaded' | 'imported';
+export type Screen = "source" | "study" | "test";
+export type RefType = "branch" | "tag";
+export type SourceKind = "sample" | "downloaded" | "imported";
 
 export type Card = {
   id: string;

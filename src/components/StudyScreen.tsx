@@ -174,10 +174,7 @@ export function StudyScreen({
 
             <View style={styles.navRow}>
               <Pressable
-                style={[
-                  styles.navButton,
-                  isFirst && styles.navButtonDisabled,
-                ]}
+                style={[styles.navButton, isFirst && styles.navButtonDisabled]}
                 onPress={handlePrev}
                 disabled={isFirst}
               >
@@ -185,10 +182,7 @@ export function StudyScreen({
                   {t("study.prev")}
                 </Text>
               </Pressable>
-              <Pressable
-                style={styles.navButton}
-                onPress={handleNext}
-              >
+              <Pressable style={styles.navButton} onPress={handleNext}>
                 <Text style={shared.secondaryButtonText}>
                   {isLast ? t("study.restart") : t("study.next")}
                 </Text>

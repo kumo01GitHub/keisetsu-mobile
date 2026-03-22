@@ -226,14 +226,14 @@ export function TestScreen({
                           }}
                         >
                           {result.correct
-                            ? t("test.correct", "正解")
-                            : t("test.incorrect", "不正解")}
+                            ? t("test.correct", "Correct")
+                            : t("test.incorrect", "Incorrect")}
                         </Text>
                       </View>
                     ))
                   ) : (
                     <Text style={styles.historyNoMistake}>
-                      {t("test.noResultData", "記録データなし")}
+                      {t("test.noResultData", "No record data")}
                     </Text>
                   )}
                 </View>

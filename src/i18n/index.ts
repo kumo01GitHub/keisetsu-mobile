@@ -1,9 +1,9 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import * as Localization from 'expo-localization';
+import * as Localization from "expo-localization";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 
-import en from './locales/en';
-import ja from './locales/ja';
+import en from "./locales/en";
+import ja from "./locales/ja";
 
 const resources = {
   en: { translation: en },
@@ -20,13 +20,13 @@ function getDeviceLanguage(): string {
       return lang;
     }
   }
-  return 'en';
+  return "en";
 }
 
 i18n.use(initReactI18next).init({
   resources,
   lng: getDeviceLanguage(),
-  fallbackLng: 'en',
+  fallbackLng: "en",
   interpolation: {
     escapeValue: false,
   },
