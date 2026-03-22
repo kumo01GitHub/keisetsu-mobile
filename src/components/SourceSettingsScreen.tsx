@@ -142,9 +142,7 @@ const styles = StyleSheet.create({
     color: "#f0fdfa",
   },
   infoPanel: {
-    backgroundColor: "#f4efe5",
-    borderRadius: 16,
-    padding: 14,
+    ...shared.card,
     gap: 6,
   },
   infoLabel: {

@@ -214,22 +214,10 @@ export function SourceScreen({
         </Text>
         {deckOptions.length ? (
           deckOptions.map((deckOption) => (
-            <View
-              key={deckOption.databaseName}
-              style={[
-                styles.databaseRow,
-                activeDatabaseName === deckOption.databaseName &&
-                  styles.databaseRowActive,
-              ]}
-            >
+            <View key={deckOption.databaseName} style={[styles.databaseRow]}>
               <View style={styles.databaseMeta}>
                 <Text style={styles.databaseName}>
                   {deckOption.displayName}
-                </Text>
-                <Text style={styles.databaseHint}>
-                  {activeDatabaseName === deckOption.databaseName
-                    ? t("source.activeDeckHint")
-                    : t("source.savedDeckHint")}
                 </Text>
               </View>
 
@@ -254,6 +242,20 @@ export function SourceScreen({
 }
 
 const styles = StyleSheet.create({
+  pagerLabel: {
+    color: "#374151",
+    fontWeight: "700",
+  },
+  databaseRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: COLORS.gray,
+  },
   label: {
     fontSize: 13,
     fontWeight: "700",
@@ -286,26 +288,29 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   pagerButton: {
-    backgroundColor: "#dcfce7",
-    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#f8f8f8",
+    borderRadius: 16,
     paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingVertical: 12,
+    borderWidth: 1.5,
+    borderColor: "#ececec",
+    marginVertical: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.02,
+    shadowRadius: 1,
+    shadowOffset: { width: 0, height: 1 },
+    elevation: 1,
+    flexDirection: "row",
+    minHeight: 40,
+    minWidth: 80,
   },
   pagerButtonText: {
-    color: "#166534",
-    fontWeight: "800",
-  },
-  pagerLabel: {
-    color: "#374151",
+    color: "#1a1b1d",
     fontWeight: "700",
-  },
-  databaseRow: {
-    backgroundColor: "#f8f5ec",
-    borderRadius: 16,
-    padding: 14,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    letterSpacing: 0.2,
+    opacity: 0.8,
   },
   databaseRowActive: {
     backgroundColor: "#d9f99d",
@@ -337,9 +342,8 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
   catalogItem: {
-    backgroundColor: "#f8f5ec",
-    borderRadius: 14,
-    padding: 14,
+    ...shared.card,
+    backgroundColor: "#f8f8f8",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 
-import { COLORS, shared } from "../styles/shared";
+import { COLORS } from "../styles/shared";
 import type { DeckOption } from "../types";
 
 type Props = {
@@ -134,69 +134,63 @@ export function DeckSelector({
   );
 
   return (
-    <View style={shared.card}>
-      <Text style={shared.sectionTitle}>{t("deck.activeDeck")}</Text>
-
-      <View style={styles.dropdownWrap}>
-        <View ref={triggerWrapRef} collapsable={false}>
-          <Pressable
-            onPress={toggleDropdown}
-            style={styles.dropdownButton}
-            accessibilityRole="button"
-            accessibilityLabel={t("deck.selectDeck")}
-          >
-            <Text style={styles.dropdownSelectedText} numberOfLines={1}>
-              {selectedLabel}
-            </Text>
-            <Text style={styles.dropdownChevron}>{expanded ? "▲" : "▼"}</Text>
-          </Pressable>
-        </View>
-
-        <Modal
-          transparent
-          animationType="fade"
-          visible={expanded}
-          onRequestClose={closeDropdown}
+    <View style={styles.dropdownWrap}>
+      <View ref={triggerWrapRef} collapsable={false}>
+        <Pressable
+          onPress={toggleDropdown}
+          style={styles.dropdownButton}
+          accessibilityRole="button"
+          accessibilityLabel={t("deck.selectDeck")}
         >
-          <View style={styles.modalRoot}>
-            <Pressable style={styles.modalBackdrop} onPress={closeDropdown} />
-            <View
-              style={[
-                styles.modalListWrap,
-                menuFrame
-                  ? {
-                      left: menuFrame.left,
-                      top: menuFrame.top,
-                      width: menuFrame.width,
-                    }
-                  : styles.modalListFallback,
-              ]}
-            >
-              <View style={styles.dropdownList}>
-                <ScrollView
-                  style={styles.dropdownScroll}
-                  contentContainerStyle={styles.dropdownScrollContent}
-                  showsVerticalScrollIndicator={false}
-                >
-                  {optionItems}
-                </ScrollView>
-              </View>
-            </View>
-          </View>
-        </Modal>
+          <Text style={styles.dropdownSelectedText} numberOfLines={1}>
+            {selectedLabel}
+          </Text>
+          <Text style={styles.dropdownChevron}>{expanded ? "▲" : "▼"}</Text>
+        </Pressable>
       </View>
 
-      {!deckOptions.length ? (
-        <Text style={shared.emptyText}>{t("deck.noDecksHint")}</Text>
-      ) : null}
+      <Modal
+        transparent
+        animationType="fade"
+        visible={expanded}
+        onRequestClose={closeDropdown}
+      >
+        <View style={styles.modalRoot}>
+          <Pressable style={styles.modalBackdrop} onPress={closeDropdown} />
+          <View
+            style={[
+              styles.modalListWrap,
+              menuFrame
+                ? {
+                    left: menuFrame.left,
+                    top: menuFrame.top,
+                    width: menuFrame.width,
+                  }
+                : styles.modalListFallback,
+            ]}
+          >
+            <View style={styles.dropdownList}>
+              <ScrollView
+                style={styles.dropdownScroll}
+                contentContainerStyle={styles.dropdownScrollContent}
+                showsVerticalScrollIndicator={false}
+              >
+                {optionItems}
+              </ScrollView>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   dropdownWrap: {
-    backgroundColor: "#f8f5ec",
-    borderRadius: 16,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: COLORS.gray,
     overflow: "hidden",
   },
   dropdownButton: {

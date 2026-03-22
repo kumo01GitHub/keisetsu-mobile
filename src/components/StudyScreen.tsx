@@ -105,13 +105,16 @@ export function StudyScreen({
 
   return (
     <View style={shared.sectionStack}>
-      <DeckSelector
-        activeDatabaseName={activeDatabaseName}
-        deckOptions={deckOptions}
-        onSelectDeck={onSelectDeck}
-        onAddDeck={onOpenSource}
-      />
-
+      <View style={shared.card}>
+        <Text style={shared.sectionTitle}>{t("deck.activeDeck")}</Text>
+        <DeckSelector
+          activeDatabaseName={activeDatabaseName}
+          deckOptions={deckOptions}
+          onSelectDeck={onSelectDeck}
+          onAddDeck={onOpenSource}
+        />
+      </View>
+      {/* restore previous color for study card */}
       <View style={shared.card}>
         <View style={styles.cardHeader}>
           <Text style={shared.sectionTitle}>{t("study.title")}</Text>
@@ -291,11 +294,17 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   flashCard: {
-    backgroundColor: "#1f2937",
-    borderRadius: 22,
+    backgroundColor: COLORS.black,
+    borderRadius: 10,
     padding: 18,
-    gap: 8,
-    minHeight: 140,
+    gap: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.02,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 1 },
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: COLORS.gray,
   },
   flashCardFlipped: {
     backgroundColor: "#134e4a",
@@ -364,7 +373,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 12,
     alignItems: "center",
-    backgroundColor: "#f8f5ec",
+    backgroundColor: "#f8f8f8",
     borderRadius: 16,
     padding: 14,
   },

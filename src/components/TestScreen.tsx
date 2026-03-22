@@ -111,19 +111,21 @@ export function TestScreen({
 
   return (
     <View style={shared.sectionStack}>
-      <DeckSelector
-        activeDatabaseName={activeDatabaseName}
-        deckOptions={deckOptions}
-        onSelectDeck={onSelectDeck}
-        onAddDeck={onOpenSource}
-      />
-
+      <View style={shared.card}>
+        <Text style={shared.sectionTitle}>{t("deck.activeDeck")}</Text>
+        <DeckSelector
+          activeDatabaseName={activeDatabaseName}
+          deckOptions={deckOptions}
+          onSelectDeck={onSelectDeck}
+          onAddDeck={onOpenSource}
+        />
+      </View>
       <View style={shared.card}>
         <Text style={shared.sectionTitle}>{t("test.title")}</Text>
         <Text style={shared.sectionText}>{t("test.description")}</Text>
 
         {testComplete ? (
-          <View style={styles.summaryCard}>
+          <View style={shared.card}>
             <Text style={styles.summaryTitle}>{t("test.resultTitle")}</Text>
             <Text style={styles.summaryScore}>
               {t("test.score", {
@@ -139,7 +141,7 @@ export function TestScreen({
             </Pressable>
           </View>
         ) : currentTestCard ? (
-          <View style={styles.testCard}>
+          <View style={shared.card}>
             <Text style={styles.progressText}>
               {t("test.progress", {
                 current: testIndex + 1,
@@ -202,7 +204,7 @@ export function TestScreen({
 
               {expandedHistoryKey ===
               `${record.finishedAt}-${record.databaseLabel}` ? (
-                <View style={styles.historyDetailCard}>
+                <View style={[shared.card, { marginTop: 12 }]}>
                   <Text style={styles.historyDetailTitle}>
                     {t("test.resultDetailsTitle", "テスト結果")}
                   </Text>
@@ -210,7 +212,7 @@ export function TestScreen({
                     record.results.map((result, index) => (
                       <View
                         key={`${record.finishedAt}-${result.term}-${index}`}
-                        style={styles.mistakeRow}
+                        style={shared.card}
                       >
                         <Text style={styles.mistakeTerm}>{result.term}</Text>
                         <Text style={styles.mistakeSummary}>
@@ -249,12 +251,7 @@ export function TestScreen({
 }
 
 const styles = StyleSheet.create({
-  testCard: {
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 18,
-    gap: 16,
-  },
+  // testCard: shared.card を利用するため削除
   progressText: {
     color: "#0f766e",
     fontWeight: "800",
@@ -274,7 +271,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderWidth: 1.5,
-    borderColor: "#ececec",
+    borderColor: COLORS.gray,
     marginVertical: 4,
     shadowColor: "#000",
     shadowOpacity: 0.02,
@@ -306,12 +303,6 @@ const styles = StyleSheet.create({
   choiceHint: {
     color: "#888",
     fontSize: 12,
-  },
-  summaryCard: {
-    backgroundColor: "#ececec",
-    borderRadius: 16,
-    padding: 18,
-    gap: 10,
   },
   summaryTitle: {
     color: "#1a1b1d",
@@ -356,23 +347,9 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "600",
   },
-  historyDetailCard: {
-    marginTop: 8,
-    marginBottom: 10,
-    backgroundColor: "#ececec",
-    borderRadius: 10,
-    padding: 12,
-    gap: 8,
-  },
   historyDetailTitle: {
     color: "#0f766e",
     fontWeight: "800",
-  },
-  mistakeRow: {
-    gap: 2,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 10,
   },
   mistakeTerm: {
     color: "#0f766e",
