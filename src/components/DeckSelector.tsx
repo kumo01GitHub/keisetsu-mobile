@@ -187,7 +187,7 @@ export function DeckSelector({
 
 const styles = StyleSheet.create({
   dropdownWrap: {
-    backgroundColor: "#fff",
+    backgroundColor: "#f8f8f8",
     borderRadius: 10,
     borderWidth: 1,
     borderColor: COLORS.gray,
